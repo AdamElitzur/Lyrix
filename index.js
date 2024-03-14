@@ -37,7 +37,6 @@ app.get("/getLyrics/:trackId", (req, res) => {
       let json = JSON.parse(body);
       let clientId = json.clientId;
       let accessToken = json.accessToken;
-      console.log(json);
 
       request.get(
         {
