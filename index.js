@@ -50,7 +50,7 @@ app.get("/getLyrics/:trackId", (req, res) => {
         },
         (error, response, body) => {
           if (error) {
-            return res.status(500).send;
+            return res.status(500).send({ error: { message: error.message } });
           }
           res.send(JSON.stringify(JSON.parse(response.body), null, 2));
         }
