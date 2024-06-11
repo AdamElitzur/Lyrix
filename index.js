@@ -5,6 +5,7 @@ const app = express();
 const path = require("path");
 const cookie = process.env.COOKIE;
 const base_url = process.env.LYRICS_BASE_URL;
+const youtubesearchapi = require("youtube-search-api");
 
 // Serve static files from the 'public' folder
 app.use(express.static(path.join(__dirname, "public")));
@@ -57,6 +58,28 @@ app.get("/getLyrics/:trackId", (req, res) => {
       );
     }
   );
+});
+
+app.get("/searchyt/:search", async (req, res) => {
+  // const { body } = req;
+  console.log(req.params.search);
+  const r = await youtubesearchapi.GetListByKeyword(
+    req.params.search,
+    false,
+    1,
+    {
+      type: "video",
+    }
+  );
+  let thumbnail = r.items[0].thumbnail.thumbnails[0].url;
+  if (thumbnail.substring(0, 6) != "https:") {
+    thumbnail = "https:" + thumbnail;
+  }
+  res.status(200).json({
+    message: "started",
+    id: `${r.items[0].id}`,
+    thumbnail: thumbnail,
+  });
 });
 
 // app.get("/getLyricsByName/:musician/:track", (req, res) => {
